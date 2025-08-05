@@ -37,8 +37,8 @@
 }
 
 .btn-login {
-  height: 40px;
   width: 100%;
+  padding: 10px;
   background: #1a6b5a;
   border: none;
   border-radius: 5px;
@@ -54,6 +54,13 @@
 .link {
   text-align: center;
   margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+form .link p {
+  cursor: pointer;
+  color: black;
 }
 
 /* Ajuste para telas pequenas */
