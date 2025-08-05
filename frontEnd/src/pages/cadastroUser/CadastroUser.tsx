@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import Spinner from '../../components/spinner';
+import Spinner from '../../components/Spinner';
 import './cadastroUser.css';
 
 export default function Cadastro() {
@@ -14,21 +14,22 @@ export default function Cadastro() {
 
   const navigate = useNavigate()
 
+  function resetCampos() {
+    setNome("");
+    setIdade("");
+    setDataNascimento("");
+    setEmail("");
+    setUsuario("");
+    setSenha("");
+  }
+
+
   function handleCadastro(e: React.FormEvent) {
     e.preventDefault();
-    console.log({
-      nome,
-      idade,
-      dataNascimento,
-      email,
-      usuario,
-      senha
-    });
-
-    // Limpar campos
-
 
     setSpinner(true)
+
+    resetCampos()
 
     setTimeout(() => {
       setSpinner(false)

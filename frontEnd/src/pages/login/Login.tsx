@@ -20,7 +20,7 @@ export default function Login() {
 
     setSpinner(true)
 
-    setInterval(() => {
+    setTimeout(() => {
       navigate("/homePag")
     }, 1000);
   }
