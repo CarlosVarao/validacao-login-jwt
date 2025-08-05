@@ -1,24 +1,34 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import Spinner from '../../components/Spinner';
 import './Login.css';
 
 export default function Login() {
   const [loginInput, setLoginInput] = useState<string>("");
   const [senhaInput, setSenhaInput] = useState<string>("");
+  const [spinner, setSpinner] = useState<boolean>(false)
 
   const navigate = useNavigate()
 
   function btnClick(e: React.FormEvent) {
     e.preventDefault();
+
+
     console.log(loginInput, senhaInput);
     setLoginInput("");
     setSenhaInput("");
+
+    setSpinner(true)
+
+    setInterval(() => {
+      navigate("/homePag")
+    }, 1000);
   }
 
   function clickCriarConta() {
     setTimeout(() => {
       navigate('/cadastro')
-    }, 1000)
+    }, 300)
   }
 
   return (
@@ -51,7 +61,7 @@ export default function Login() {
           />
         </div>
 
-        <button type="submit" className="btn-login">Entrar</button>
+        <button type="submit" className="btn-login">{spinner ? <Spinner /> : "Entrar"}</button>
 
         <div className="link">
           <p onClick={clickCriarConta}>Criar conta</p>
