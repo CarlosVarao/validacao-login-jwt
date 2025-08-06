@@ -1,10 +1,14 @@
 const express = require("express");
+const cors = require("cors");
 const sqlite3 = require("sqlite3").verbose();
 const path = require("path");
 const bcrypt = require("bcrypt");
 
 const app = express();
 const PORT = 3001;
+
+// Configurar CORS (ajuste o origin para seu front-end)
+app.use(cors({ origin: "http://localhost:5173" }));
 
 // Middleware para interpretar JSON
 app.use(express.json());
@@ -32,38 +36,64 @@ db.run(`
   )
 `);
 
-// Rota POST para cadastro
+// Rota POST para cadastro com checagem de duplicidade
 app.post("/cadastro", async (req, res) => {
   try {
     const { nome, idade, dataNascimento, email, usuario, senha } = req.body;
 
+    // Validação básica dos campos
     if (!nome || !idade || !dataNascimento || !email || !usuario || !senha) {
       return res.status(400).json({ error: "Preencha todos os campos" });
     }
 
-    // Criptografar senha
-    const saltRounds = 10;
-    const hashedSenha = await bcrypt.hash(senha, saltRounds);
+    // Verificar se já existe usuário com mesmo email ou usuário
+    const queryCheck = `SELECT email, usuario FROM usuarios WHERE email = ? OR usuario = ?`;
 
-    const query = `
-      INSERT INTO usuarios (nome, idade, dataNascimento, email, usuario, senha)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `;
-
-    db.run(
-      query,
-      [nome, idade, dataNascimento, email, usuario, hashedSenha],
-      function (err) {
-        if (err) {
-          console.error(err.message);
-          return res.status(500).json({ error: "Erro ao cadastrar usuário" });
-        }
-
-        res
-          .status(201)
-          .json({ message: "Usuário cadastrado com sucesso", id: this.lastID });
+    db.get(queryCheck, [email, usuario], async (err, row) => {
+      if (err) {
+        console.error(err.message);
+        return res.status(500).json({ error: "Erro ao consultar usuários" });
       }
-    );
+
+      if (row) {
+        if (row.email === email && row.usuario === usuario) {
+          return res
+            .status(409)
+            .json({ error: "E-mail e usuário já cadastrados" });
+        } else if (row.email === email) {
+          return res.status(409).json({ error: "E-mail já cadastrado" });
+        } else if (row.usuario === usuario) {
+          return res.status(409).json({ error: "Usuário já cadastrado" });
+        }
+      }
+
+      // Se não houver conflitos, prossegue com o cadastro
+      const saltRounds = 10;
+      const hashedSenha = await bcrypt.hash(senha, saltRounds);
+
+      const queryInsert = `
+        INSERT INTO usuarios (nome, idade, dataNascimento, email, usuario, senha)
+        VALUES (?, ?, ?, ?, ?, ?)
+      `;
+
+      db.run(
+        queryInsert,
+        [nome, idade, dataNascimento, email, usuario, hashedSenha],
+        function (err) {
+          if (err) {
+            console.error(err.message);
+            return res.status(500).json({ error: "Erro ao cadastrar usuário" });
+          }
+
+          res
+            .status(201)
+            .json({
+              message: "Usuário cadastrado com sucesso",
+              id: this.lastID,
+            });
+        }
+      );
+    });
   } catch (error) {
     console.error("Erro interno:", error);
     res.status(500).json({ error: "Erro no servidor" });

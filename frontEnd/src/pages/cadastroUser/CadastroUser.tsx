@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import Spinner from '../../components/Spinner';
+import { postCadastro } from '../../services/dadosApi'
 import './cadastroUser.css';
 
 export default function Cadastro() {
@@ -11,6 +12,7 @@ export default function Cadastro() {
   const [usuario, setUsuario] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
   const [spinner, setSpinner] = useState<boolean>(false)
+  const [resultApi, setResultApi] = useState(" ")
 
   const navigate = useNavigate()
 
@@ -24,18 +26,21 @@ export default function Cadastro() {
   }
 
 
-  function handleCadastro(e: React.FormEvent) {
+  async function handleCadastro(e: React.FormEvent) {
     e.preventDefault();
+    setSpinner(true);
 
-    setSpinner(true)
-
-    resetCampos()
-
+    try {
+      const respostaApi = await postCadastro({ nome, idade, dataNascimento, email, usuario, senha });
+      setResultApi(respostaApi.message);
+      resetCampos();
+    } catch (error: any) {
+      setResultApi(error.error);
+    }
     setTimeout(() => {
-      setSpinner(false)
-      navigate("/")
+      setSpinner(false);
+      resetCampos()
     }, 1000);
-
   }
 
   return (
@@ -114,6 +119,7 @@ export default function Cadastro() {
         </div>
 
         <button type="submit" className="btn-login">{spinner ? <Spinner /> : "Cadastrar"}</button>
+        <p className="respostaApi">{resultApi}</p>
       </form>
     </div>
   );
