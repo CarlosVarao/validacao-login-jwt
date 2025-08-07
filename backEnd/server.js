@@ -85,12 +85,10 @@ app.post("/cadastro", async (req, res) => {
             return res.status(500).json({ error: "Erro ao cadastrar usuário" });
           }
 
-          res
-            .status(201)
-            .json({
-              message: "Usuário cadastrado com sucesso",
-              id: this.lastID,
-            });
+          res.status(201).json({
+            message: "Usuário cadastrado com sucesso",
+            id: this.lastID,
+          });
         }
       );
     });
@@ -98,6 +96,29 @@ app.post("/cadastro", async (req, res) => {
     console.error("Erro interno:", error);
     res.status(500).json({ error: "Erro no servidor" });
   }
+});
+
+app.post("/login", async (req, res) => {
+  const { loginInput, senhaInput } = req.body;
+
+  const query = `SELECT * FROM usuarios WHERE usuario = ?`;
+
+  db.get(query, [loginInput], async (err, row) => {
+    if (err) {
+      console.error(err.message);
+      return res.status(500).json({ error: "Erro ao buscar usuário" });
+    }
+
+    if (!row) {
+      return res.status(401).json({ error: "Usuário não encontrado" });
+    }
+
+    const senhaCorreta = await bcrypt.compare(senhaInput, row.senha);
+    if (!senhaCorreta) {
+      return res.status(401).json({ error: "Senha incorreta" });
+    }
+    res.json({ message: "Login realizado com sucesso", type: true });
+  });
 });
 
 // Iniciar servidor

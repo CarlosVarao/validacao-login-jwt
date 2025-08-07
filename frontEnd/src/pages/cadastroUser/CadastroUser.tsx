@@ -25,7 +25,6 @@ export default function Cadastro() {
     setSenha("");
   }
 
-
   async function handleCadastro(e: React.FormEvent) {
     e.preventDefault();
     setSpinner(true);
@@ -62,7 +61,7 @@ export default function Cadastro() {
         <div className="form-group">
           <label htmlFor="idade">Idade<span>*</span></label>
           <input
-            type="number"
+            type="text"
             id="idade"
             placeholder="Digite sua idade"
             required

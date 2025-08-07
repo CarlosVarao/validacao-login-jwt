@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import { postLogin } from '../../services/dadosApi'
 import Spinner from '../../components/Spinner';
 import './Login.css';
 
@@ -10,19 +11,33 @@ export default function Login() {
 
   const navigate = useNavigate()
 
-  function btnClick(e: React.FormEvent) {
-    e.preventDefault();
-
-
-    console.log(loginInput, senhaInput);
+  function limparCampos() {
     setLoginInput("");
     setSenhaInput("");
+  }
 
+  async function btnClick(e: React.FormEvent) {
+    e.preventDefault();
     setSpinner(true)
 
-    setTimeout(() => {
-      navigate("/homePag")
-    }, 1000);
+    try {
+      const login = await postLogin({ loginInput, senhaInput })
+
+      if (login?.type) {
+        setSpinner(true)
+        setTimeout(() => {
+          navigate("/homePag")
+        }, 1000);
+      }
+
+    } catch (error: any) {
+      console.log(error)
+    } finally {
+      setTimeout(() => {
+        limparCampos();
+        setSpinner(false);
+      }, 700);
+    }
   }
 
   function clickCriarConta() {
