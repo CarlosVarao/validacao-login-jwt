@@ -23,6 +23,6 @@ export async function postLogin(dadosLogin: DadosLogin) {
     const responde = await Axios.post(linkApi, dadosLogin);
     return responde.data;
   } catch (error: any) {
-    console.log(error.response.data);
+    throw error.response.data;
   }
 }

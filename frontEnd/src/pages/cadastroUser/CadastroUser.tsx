@@ -43,10 +43,10 @@ export default function Cadastro() {
   }
 
   return (
-    <div className="login-container">
+    <div className="cadastro__container">
       <h2>Criar Conta</h2>
       <form onSubmit={handleCadastro}>
-        <div className="form-group">
+        <div className="cadastro__form-group">
           <label htmlFor="nome">Nome<span>*</span></label>
           <input
             type="text"
@@ -58,7 +58,7 @@ export default function Cadastro() {
           />
         </div>
 
-        <div className="form-group">
+        <div className="cadastro__form-group">
           <label htmlFor="idade">Idade<span>*</span></label>
           <input
             type="text"
@@ -70,7 +70,7 @@ export default function Cadastro() {
           />
         </div>
 
-        <div className="form-group">
+        <div className="cadastro__form-group">
           <label htmlFor="dataNascimento">Data de Nascimento<span>*</span></label>
           <input
             type="date"
@@ -81,7 +81,7 @@ export default function Cadastro() {
           />
         </div>
 
-        <div className="form-group">
+        <div className="cadastro__form-group">
           <label htmlFor="email">E-mail<span>*</span></label>
           <input
             type="email"
@@ -93,7 +93,7 @@ export default function Cadastro() {
           />
         </div>
 
-        <div className="form-group">
+        <div className="cadastro__form-group">
           <label htmlFor="usuario">Usuário<span>*</span></label>
           <input
             type="text"
@@ -105,7 +105,7 @@ export default function Cadastro() {
           />
         </div>
 
-        <div className="form-group">
+        <div className="cadastro__form-group">
           <label htmlFor="senha">Senha<span>*</span></label>
           <input
             type="password"
@@ -117,9 +117,12 @@ export default function Cadastro() {
           />
         </div>
 
-        <button type="submit" className="btn-login">{spinner ? <Spinner /> : "Cadastrar"}</button>
-        <p className="respostaApi">{resultApi}</p>
+        <button type="submit" className="cadastro__btn">
+          {spinner ? <Spinner /> : "Cadastrar"}
+        </button>
+
+        <p className="cadastro__mensagem-api">{resultApi}</p>
       </form>
     </div>
-  );
+  )
 }

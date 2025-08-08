@@ -1,82 +1,139 @@
+/* Container principal */
 .login-container {
   background: #fff;
   padding: 30px;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 400px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   color: #1a6b5a;
-  box-sizing: border-box;
+  width: 350px;
+
+  /* Flexbox centralizado */
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
-.login-container h2 {
+/* Título */
+.login-title {
   text-align: center;
-  margin-bottom: 20px;
+  font-size: 1.6rem;
+  font-weight: 700;
 }
 
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.form-group label span {
-  margin-left: 1px;
-  color: red;
-}
-
-.form-group input {
+/* Form */
+.login-form {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
+/* Label */
+.form-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #123f34;
+}
+
+/* Asterisco obrigatório */
+.required {
+  color: #d64545;
+  font-weight: 700;
+}
+
+/* Inputs */
+.form-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d6d6d6;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  color: #123f34;
+  margin-top: 5px;
+}
+
+.form-input:focus {
+  border-color: #1a6b5a;
+  box-shadow: 0 0 0 4px rgba(26, 107, 90, 0.06);
+}
+
+/* Botão principal */
 .btn-login {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   background: #1a6b5a;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 16px;
-  color: white;
+  color: #ffffff;
+  font-weight: 600;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* espaço entre texto e spinner */
 }
 
-.btn-login:hover {
-  background: #1a6b5a;
+/* Container do botão e mensagem */
+.btn-login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 }
 
-.link {
+/* Resultado / mensagem da API */
+.result-login {
+  font-size: 12px;
   text-align: center;
-  margin-top: 10px;
+  color: #d64545;
+  margin: 0;
+}
+
+/* Criar conta */
+.btn-link-container {
   display: flex;
   justify-content: center;
 }
 
-form .link p {
+.btn-criar-conta {
   cursor: pointer;
-  color: black;
+  color: #123f34;
+  background: transparent;
+  border: none;
+  padding: 8px 12px;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: background 0.12s ease;
 }
 
-/* Ajuste para telas pequenas */
-@media (max-width: 400px) {
+.btn-criar-conta:hover {
+  background: rgba(26, 107, 90, 0.06);
+}
+
+/* Ajustes para telas pequenas */
+@media (max-width: 420px) {
   .login-container {
-    padding: 20px;
     border-radius: 6px;
+    width: 100%;
+    padding: 20px;
   }
 
-  .form-group input {
-    padding: 8px;
-    font-size: 14px;
+  .form-input {
+    padding: 9px 10px;
+    font-size: 0.95rem;
   }
 
   .btn-login {
-    padding: 8px;
-    font-size: 14px;
+    padding: 10px;
+    font-size: 15px;
+  }
+
+  .login-title {
+    font-size: 1.4rem;
   }
 }
