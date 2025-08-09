@@ -7,13 +7,9 @@ const bcrypt = require("bcrypt");
 const app = express();
 const PORT = 3001;
 
-// Configurar CORS (ajuste o origin para seu front-end)
 app.use(cors({ origin: "http://localhost:5173" }));
-
-// Middleware para interpretar JSON
 app.use(express.json());
 
-// Conexão com o banco SQLite
 const dbPath = path.resolve(__dirname, "banco.db");
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
@@ -23,7 +19,6 @@ const db = new sqlite3.Database(dbPath, (err) => {
   }
 });
 
-// Criar tabela se não existir
 db.run(`
   CREATE TABLE IF NOT EXISTS usuarios (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -36,17 +31,14 @@ db.run(`
   )
 `);
 
-// Rota POST para cadastro com checagem de duplicidade
 app.post("/cadastro", async (req, res) => {
   try {
     const { nome, idade, dataNascimento, email, usuario, senha } = req.body;
 
-    // Validação básica dos campos
     if (!nome || !idade || !dataNascimento || !email || !usuario || !senha) {
       return res.status(400).json({ error: "Preencha todos os campos" });
     }
 
-    // Verificar se já existe usuário com mesmo email ou usuário
     const queryCheck = `SELECT email, usuario FROM usuarios WHERE email = ? OR usuario = ?`;
 
     db.get(queryCheck, [email, usuario], async (err, row) => {
@@ -67,7 +59,6 @@ app.post("/cadastro", async (req, res) => {
         }
       }
 
-      // Se não houver conflitos, prossegue com o cadastro
       const saltRounds = 10;
       const hashedSenha = await bcrypt.hash(senha, saltRounds);
 
@@ -121,7 +112,6 @@ app.post("/login", async (req, res) => {
   });
 });
 
-// Iniciar servidor
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });

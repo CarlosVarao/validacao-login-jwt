@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from "react-router-dom";
 import Spinner from '../../components/Spinner';
 import { postCadastro } from '../../services/dadosApi'
 import './cadastroUser.css';
@@ -14,8 +13,6 @@ export default function Cadastro() {
   const [spinner, setSpinner] = useState<boolean>(false)
   const [resultApi, setResultApi] = useState(" ")
 
-  const navigate = useNavigate()
-
   function resetCampos() {
     setNome("");
     setIdade("");
@@ -25,21 +22,31 @@ export default function Cadastro() {
     setSenha("");
   }
 
+  function delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   async function handleCadastro(e: React.FormEvent) {
     e.preventDefault();
+    setResultApi("")
     setSpinner(true);
 
     try {
       const respostaApi = await postCadastro({ nome, idade, dataNascimento, email, usuario, senha });
-      setResultApi(respostaApi.message);
+      delay(1000)
+      setResultApi(respostaApi?.message);
       resetCampos();
     } catch (error: any) {
-      setResultApi(error.error);
-    }
-    setTimeout(() => {
+      delay(700)
+      resetCampos();
+      setResultApi(error.error || "Sem resposta do Servidor");
       setSpinner(false);
-      resetCampos()
-    }, 1000);
+    }
+
+    // setTimeout(() => {
+    //   setSpinner(false);
+    //   resetCampos()
+    // }, 1000);
   }
 
   return (

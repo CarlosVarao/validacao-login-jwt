@@ -13,7 +13,7 @@ export async function postCadastro(usuario: Usuario) {
     const response = await Axios.post(linkApi, usuario);
     return response.data;
   } catch (error: any) {
-    throw error.response?.data;
+    throw error.response.data;
   }
 }
 

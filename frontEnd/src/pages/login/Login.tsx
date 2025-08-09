@@ -8,7 +8,7 @@ export default function Login() {
   const [loginInput, setLoginInput] = useState<string>("");
   const [senhaInput, setSenhaInput] = useState<string>("");
   const [spinner, setSpinner] = useState<boolean>(false);
-  const [resultApi, setResultApi] = useState<string>("");
+  const [resultApi, setResultApi] = useState<any>("");
 
   const navigate = useNavigate();
 
@@ -35,13 +35,11 @@ export default function Login() {
         navigate("/homePag");
         setSpinner(false);
       }
-
     } catch (error: any) {
       await delay(700)
       limparCampos();
-      setResultApi(error.error)
+      setResultApi(error.error || "Sem resposta do Servidor")
       setSpinner(false);
-
     }
   }
 
