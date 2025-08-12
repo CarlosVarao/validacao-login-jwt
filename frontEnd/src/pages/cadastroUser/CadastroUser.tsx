@@ -10,6 +10,7 @@ export default function Cadastro() {
   const [email, setEmail] = useState<string>("");
   const [usuario, setUsuario] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
+  const [confirmeSenha, setConfirmeSenha] = useState<string>("");
   const [spinner, setSpinner] = useState<boolean>(false)
   const [resultApi, setResultApi] = useState(" ")
 
@@ -20,6 +21,7 @@ export default function Cadastro() {
     setEmail("");
     setUsuario("");
     setSenha("");
+    setConfirmeSenha("")
   }
 
   function delay(ms: number) {
@@ -31,22 +33,26 @@ export default function Cadastro() {
     setResultApi("")
     setSpinner(true);
 
+    if (senha !== confirmeSenha) {
+      await delay(1000);
+      resetCampos();
+      setResultApi("Senhas diferentes")
+      setSpinner(false);
+      return
+    }
+
     try {
       const respostaApi = await postCadastro({ nome, idade, dataNascimento, email, usuario, senha });
-      delay(1000)
+      await delay(1000)
       setResultApi(respostaApi?.message);
       resetCampos();
+      setSpinner(false);
     } catch (error: any) {
-      delay(700)
+      await delay(700)
       resetCampos();
       setResultApi(error.error || "Sem resposta do Servidor");
       setSpinner(false);
     }
-
-    // setTimeout(() => {
-    //   setSpinner(false);
-    //   resetCampos()
-    // }, 1000);
   }
 
   return (
@@ -121,6 +127,18 @@ export default function Cadastro() {
             required
             value={senha}
             onChange={e => setSenha(e.target.value)}
+          />
+        </div>
+
+        <div className="cadastro__form-group">
+          <label htmlFor="confirmeSenha">Confirme Senha<span>*</span></label>
+          <input
+            type="password"
+            id="confirmeSenha"
+            placeholder="Digite sua senha"
+            required
+            value={confirmeSenha}
+            onChange={e => setConfirmeSenha(e.target.value)}
           />
         </div>
 

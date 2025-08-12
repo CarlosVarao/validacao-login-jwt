@@ -30,6 +30,7 @@ export default function Login() {
       const login = await postLogin({ loginInput, senhaInput });
 
       if (login?.type) {
+        localStorage.setItem("autenticador", "true")
         await delay(1000)
         limparCampos();
         navigate("/homePag");
@@ -44,8 +45,8 @@ export default function Login() {
   }
 
   async function clickCriarConta() {
-    await delay(1000)
-    navigate('/cadastro');
+    //await delay(1000) 
+    navigate('/cadastro')
   }
 
   return (
